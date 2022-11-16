@@ -101,7 +101,7 @@ public class Network {
     }
 
     private static void changeNickName(String login, String newNickName) throws SQLException{
-        SQLConnection.statement.executeUpdate(String.format("UPDATE userList SET nickname = '%s' WHERE login = '%s'", newNickName, login));
+        SQLConnection.statement.executeUpdate(String.format("UPDATE public.userlist SET nickname = '%s' WHERE login = '%s'", newNickName, login));
     }
 
     public void closeConnection() {

@@ -12,19 +12,21 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server {
     private static final Logger LOGGER = LogManager.getLogger("Server");
-    private final AuthService authService;
     private List<ClientHandler> connectedUsers;
     private final ExecutorService executorService;
+    private final InMemoryAuthServiceImpl authService;
 
-    public Server() {
-        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        authService = new InMemoryAuthServiceImpl();
+    public Server(InMemoryAuthServiceImpl authService, ExecutorService executorService) {
+        this.authService = authService;
+        this.executorService = executorService;
+    }
+
+    public void start(){
         try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT)) {
-            authService.start();
+            this.authService.start();
             LOGGER.debug("Server started");
             connectedUsers = new ArrayList<>();
             while (true) {
@@ -39,8 +41,8 @@ public class Server {
             LOGGER.debug("Ошибка в работе сервера");
         }
         finally {
-            if (authService != null) {
-                authService.end();
+            if (this.authService != null) {
+                this.authService.end();
             }
         }
     }

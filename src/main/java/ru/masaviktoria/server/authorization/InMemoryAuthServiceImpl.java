@@ -22,7 +22,7 @@ public class InMemoryAuthServiceImpl  implements  AuthService {
     public synchronized String getNicknameByLoginAndPassword(String login, String password) {
         try {
             SQLConnection.connect();
-            try (ResultSet user = SQLConnection.statement.executeQuery(String.format("SELECT * FROM userList WHERE login = '%s'", login))) {
+            try (ResultSet user = SQLConnection.statement.executeQuery(String.format("SELECT * FROM public.userlist WHERE login = '%s'", login))) {
                 while (user.next()) {
                     if (user.getString("password").equals(password)) {
                         return user.getString("nickname");
